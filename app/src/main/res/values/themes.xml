@@ -1,0 +1,14 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <style name="Base.Theme.MyChat" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Force status bar color to white -->
+        <item name="android:statusBarColor">@android:color/white</item>
+
+        <!-- Make status bar icons dark -->
+        <item name="android:windowLightStatusBar">true</item>
+
+        <!-- Ensure status bar color applies correctly -->
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+    </style>
+
+    <style name="Theme.MyChat" parent="Base.Theme.MyChat" />
+</resources>

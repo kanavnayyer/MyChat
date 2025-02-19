@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="message"
+            type="com.awesome.mychat.model.Message" />
+        <variable
+            name="isSent"
+            type="Boolean" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/_8dp">
+
+        <TextView
+            android:id="@+id/txtMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/_12dp"
+            android:textSize="@dimen/_14sp"
+            android:textColor="@android:color/black"
+            android:background="@drawable/bg_message"
+            android:text="@{message.messageText}"
+            app:messageAlignment="@{isSent}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <TextView
+            android:id="@+id/txtTimestamp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:formatTimestamp="@{message.timestamp}"
+            android:textSize="@dimen/_12sp"
+            android:padding="@dimen/_4dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:textColor="@android:color/darker_gray"
+            app:messageAlignment="@{isSent}"
+            app:layout_constraintTop_toBottomOf="@id/txtMessage"
+            android:layout_marginTop="@dimen/_4dp" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

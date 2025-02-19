@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:startDestination="@id/chatFragment">
+
+    <fragment
+        android:id="@+id/chatFragment"
+        android:name="com.awesome.mychat.ui.ChatFragment"
+        android:label="Chats"
+        tools:layout="@layout/fragment_chat">
+
+        <action
+            android:id="@+id/action_chatFragment_to_chatScreenFragment"
+            app:destination="@id/chatScreenFragment">
+            <argument
+                android:name="user"
+                app:argType="com.awesome.mychat.model.User" />
+        </action>
+
+        <action
+            android:id="@+id/action_chatFragment_to_usersFragment"
+            app:destination="@id/usersFragment"/>
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/usersFragment"
+        android:name="com.awesome.mychat.ui.UsersFragment"
+        android:label="Users"
+        tools:layout="@layout/fragment_search_screen">
+
+        <action
+            android:id="@+id/action_usersFragment_to_chatScreenFragment"
+            app:destination="@id/chatScreenFragment">
+            <argument
+                android:name="user"
+                app:argType="com.awesome.mychat.model.User" />
+        </action>
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/chatScreenFragment"
+        android:name="com.awesome.mychat.ui.ChatScreenFragment"
+        android:label="Chat"
+        tools:layout="@layout/fragment_chat_screen">
+
+        <argument
+            android:name="user"
+            app:argType="com.awesome.mychat.model.User" />
+    </fragment>
+
+</navigation>

@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "213003987287",
+    "project_id": "mychatt-dabdc",
+    "storage_bucket": "mychatt-dabdc.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:213003987287:android:d20f2ae169dad1d1d9b612",
+        "android_client_info": {
+          "package_name": "com.awesome.mychat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "213003987287-n3ulr0u2vs9aste3928k7qhfafubta79.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.awesome.mychat",
+            "certificate_hash": "9babd270855e312d04dd4bf6f3de6a3b4e19c36d"
+          }
+        },
+        {
+          "client_id": "213003987287-9g701h0o64sbp0oeak23hhr20mgla3ge.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCPy2ii5-3kSUIOKkQ8XQcYdYnjF9OYp5g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "213003987287-9g701h0o64sbp0oeak23hhr20mgla3ge.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
