@@ -1,6 +1,8 @@
 package com.awesome.mychat.ui
-
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
@@ -8,6 +10,7 @@ import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.awesome.mychat.R
 import com.awesome.mychat.util.Constants.MAINactivity
@@ -34,8 +37,9 @@ class MainActivity : AppCompatActivity() {
 
         authViewModel.isUserLoggedIn.observe(this) { isLoggedIn ->
             if (isLoggedIn) {
-                startActivity(Intent(this, ChatActivity::class.java))
-                finish()
+                checkNotificationPermission()
+//                startActivity(Intent(this, ChatActivity::class.java))
+//                finish()
             }
         }
 
@@ -54,6 +58,38 @@ class MainActivity : AppCompatActivity() {
             signIn()
         }
 
+    }
+
+    private fun checkNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            when {
+                ContextCompat.checkSelfPermission(
+                    this, Manifest.permission.POST_NOTIFICATIONS
+                ) == PackageManager.PERMISSION_GRANTED -> {
+                    goToChatScreen()  // Permission already granted
+                }
+                shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS) -> {
+                    // User previously denied, show a message before requesting
+                    Toast.makeText(this, "Allow notifications for better experience", Toast.LENGTH_LONG).show()
+                    requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                }
+                else -> {
+
+                    requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                }
+            }
+        } else {
+            goToChatScreen()
+        }
+    }
+
+    private val requestPermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+            goToChatScreen()
+        }
+    private fun goToChatScreen() {
+        startActivity(Intent(this, ChatActivity::class.java))
+        finish()
     }
 
     private fun setupGoogleSignIn() {
