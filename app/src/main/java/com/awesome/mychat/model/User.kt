@@ -9,5 +9,5 @@ data class User(
     val name: String = "",
     val profileImage: String = "",
     val fcmToken: String = "",
-    val lastSeen: Long = 0L
+    var lastSeen: Long = 0L
 ) : Parcelable

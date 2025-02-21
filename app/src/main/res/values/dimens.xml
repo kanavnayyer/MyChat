@@ -22,4 +22,8 @@
     <dimen name="_150dp">150dp</dimen>
     <dimen name="_1_5dp">1.5dp</dimen>
     <dimen name="_0_5dp">.5dp</dimen>
+    <dimen name="_11dp">11dp</dimen>
+    <dimen name="_33dp">33dp</dimen>
+    <dimen name="_40dp">40dp</dimen>
+    <dimen name="_60dp">60dp</dimen>
 </resources>

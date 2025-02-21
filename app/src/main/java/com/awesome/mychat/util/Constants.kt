@@ -15,4 +15,6 @@ object Constants {
   const val SenderId="senderId"
   const val ReceiverId="receiverId"
   const val Timestamp="timestamp"
+  const val CAMERA_PERMISSION_CODE = 101
+  const val ImageUrlchat="imageUrlchat"
 }

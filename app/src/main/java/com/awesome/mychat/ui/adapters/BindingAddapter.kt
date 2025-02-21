@@ -2,6 +2,7 @@ package com.awesome.mychat.ui.adapters
 
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.updateLayoutParams
@@ -9,6 +10,7 @@ import androidx.databinding.BindingAdapter
 import com.awesome.mychat.R
 import com.awesome.mychat.util.Constants.FormatTimestamp
 import com.awesome.mychat.util.Constants.FormattedLastSeen
+import com.awesome.mychat.util.Constants.ImageUrlchat
 import com.awesome.mychat.util.Constants.MessageAlignment
 import com.awesome.mychat.util.Constants.imageUrl
 import com.bumptech.glide.Glide
@@ -71,7 +73,36 @@ object BindingAddapter {
         }
     }
 
+    @JvmStatic
+    @BindingAdapter(MessageAlignment)
+    fun setMessageAlignmentImage(view: ImageView, isSent: Boolean) {
+        view.updateLayoutParams<ConstraintLayout.LayoutParams> {
 
+            val maxWidth = (view.context.resources.displayMetrics.widthPixels * 0.7).toInt()
+            view.maxWidth = maxWidth
 
+            if (isSent) {
+                marginStart = maxWidth / 3
+                marginEnd = 20
+                horizontalBias = 1f
+            } else {
+                marginStart = 20
+                marginEnd = maxWidth / 3
+                horizontalBias = 0f
+            }
+        }
+    }
 
-}
+    @JvmStatic
+    @BindingAdapter(ImageUrlchat)
+    fun loadImage(view: ImageView, imageUrl: String?) {
+        if (!imageUrl.isNullOrEmpty()) {
+            Glide.with(view.context)
+                .load(imageUrl)
+                .placeholder(R.drawable.ic_profile)
+                .error(R.drawable.ic_profile)
+                .into(view)
+        } else {
+            view.setImageResource(R.drawable.ic_profile)
+        }
+    }}

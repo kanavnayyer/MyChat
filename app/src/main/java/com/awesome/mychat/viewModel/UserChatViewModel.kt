@@ -1,15 +1,14 @@
 package com.awesome.mychat.viewModel
 
+import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.awesome.mychat.model.Message
-import com.awesome.mychat.util.Constants.Chats
-import com.awesome.mychat.util.Constants.ReceiverId
-import com.awesome.mychat.util.Constants.SenderId
-import com.awesome.mychat.util.Constants.Timestamp
-import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.*
+import com.google.firebase.storage.FirebaseStorage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -17,38 +16,68 @@ import javax.inject.Inject
 class UserChatViewModel @Inject constructor() : ViewModel() {
 
     private val firestore = FirebaseFirestore.getInstance()
+    private val storage = FirebaseStorage.getInstance()
+    private val auth = FirebaseAuth.getInstance()
+
     private val _messages = MutableLiveData<List<Message>>()
     val messages: LiveData<List<Message>> get() = _messages
 
+    // ✅ Modified to support both text & image messages
     fun sendMessage(message: Message) {
-        val chatRef = firestore.collection(Chats)
+        val chatId = generateChatId(message.senderId, message.receiverId)
+        val chatRef = firestore.collection("chats").document(chatId)
+        val messagesRef = chatRef.collection("messages")
 
-        chatRef.add(message)
+        chatRef.get().addOnSuccessListener { document ->
+            if (!document.exists()) {
+                val chatData = hashMapOf(
+                    "chatId" to chatId,
+                    "lastMessage" to message.message,
+                    "lastMessageTimestamp" to message.timestamp,
+                    "participants" to listOf(message.senderId, message.receiverId)
+                )
+                chatRef.set(chatData, SetOptions.merge())
+            }
+            sendMessageToSubcollection(messagesRef, message, chatRef)
+        }
+    }
+
+    private fun sendMessageToSubcollection(
+        messagesRef: CollectionReference,
+        message: Message,
+        chatRef: DocumentReference
+    ) {
+        messagesRef.add(message)
             .addOnSuccessListener {
-                Log.d("UserChatViewModel", " Message sent successfully: ${message.messageText}")
+                val chatUpdates = mapOf(
+                    "lastMessage" to message.message,
+                    "lastMessageTimestamp" to message.timestamp
+                )
+                chatRef.update(chatUpdates)
             }
             .addOnFailureListener { e ->
-                Log.e("UserChatViewModel", " Failed to send message", e)
+                Log.e("UserChatViewModel", "Failed to send message", e)
             }
     }
 
+
+
     fun fetchMessages(senderId: String, receiverId: String) {
-        firestore.collection(Chats)
-            .whereIn(SenderId, listOf(senderId, receiverId))
-            .whereIn(ReceiverId, listOf(senderId, receiverId))
-            .orderBy(Timestamp)
+        val chatId = generateChatId(senderId, receiverId)
+
+        firestore.collection("chats")
+            .document(chatId)
+            .collection("messages")
+            .orderBy("timestamp", Query.Direction.ASCENDING)
             .addSnapshotListener { snapshot, error ->
-                if (error != null) {
-                    Log.e("UserChatViewModel", " Error fetching messages", error)
-                    return@addSnapshotListener
-                }
+                if (error != null) return@addSnapshotListener
 
-                val messageList = snapshot?.documents?.map { doc ->
-                    doc.toObject(Message::class.java)!!
-                } ?: emptyList()
-
+                val messageList = snapshot?.documents?.mapNotNull { doc -> doc.toObject(Message::class.java) } ?: emptyList()
                 _messages.value = messageList
-                Log.d("UserChatViewModel", " Fetched messages: ${messageList.size}")
             }
+    }
+
+    private fun generateChatId(user1: String, user2: String): String {
+        return if (user1 < user2) "${user1}_${user2}" else "${user2}_${user1}"
     }
 }

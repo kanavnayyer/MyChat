@@ -15,4 +15,8 @@
     <string name="remoteconfig">RemoteConfig</string>
     <string name="username_">Kanav</string>
     <string name="random_time">19:00 pm</string>
+    <string name="save">Save</string>
+    <string name="failed_to_update_name">Failed to update name</string>
+    <string name="name_updated_successfully">Name updated successfully!</string>
+    <string name="user">user</string>
 </resources>

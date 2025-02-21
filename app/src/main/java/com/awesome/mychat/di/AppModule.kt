@@ -1,5 +1,6 @@
 package com.awesome.mychat.di
 
+import com.awesome.mychat.repository.RecentUsersChatRepository
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
@@ -33,4 +34,11 @@ object AppModule {
     @Provides
     @Singleton
     fun provideFirestore(): FirebaseFirestore = FirebaseFirestore.getInstance()
+
+
+    @Provides
+    @Singleton
+    fun provideRecentUsersChatRepository(firestore: FirebaseFirestore): RecentUsersChatRepository {
+        return RecentUsersChatRepository(firestore)
+    }
 }

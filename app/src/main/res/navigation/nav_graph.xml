@@ -23,7 +23,6 @@
             app:destination="@id/usersFragment"/>
     </fragment>
 
-
     <fragment
         android:id="@+id/usersFragment"
         android:name="com.awesome.mychat.ui.UsersFragment"
@@ -39,16 +38,65 @@
         </action>
     </fragment>
 
-
     <fragment
         android:id="@+id/chatScreenFragment"
         android:name="com.awesome.mychat.ui.ChatScreenFragment"
         android:label="Chat"
         tools:layout="@layout/fragment_chat_screen">
-
         <argument
             android:name="user"
             app:argType="com.awesome.mychat.model.User" />
+        <action
+            android:id="@+id/action_chatScreenFragment_to_cameraFragment"
+            app:destination="@id/cameraFragment">
+
+            <argument
+                android:name="user"
+                app:argType="com.awesome.mychat.model.User" />
+        </action>
     </fragment>
+
+    <fragment
+        android:id="@+id/cameraFragment"
+        android:name="com.awesome.mychat.ui.CameraFragment"
+        android:label="fragment_camera"
+        tools:layout="@layout/fragment_camera" >
+        <argument
+            android:name="user"
+            app:argType="com.awesome.mychat.model.User" />
+        <action
+            android:id="@+id/action_cameraFragment_to_previewFragment"
+            app:destination="@id/previewFragment">
+            <!-- Pass both imageUri and the user object -->
+            <argument
+                android:name="imageUri"
+                app:argType="string" />
+            <argument
+                android:name="user"
+                app:argType="com.awesome.mychat.model.User" />
+        </action>
+    </fragment>
+
+    <fragment
+        android:id="@+id/previewFragment"
+        android:name="com.awesome.mychat.ui.PreviewFragment"
+        android:label="fragment_preview"
+        tools:layout="@layout/fragment_preview" >
+        <argument
+            android:name="imageUri"
+            app:argType="string"
+            app:nullable="false" />
+        <argument
+            android:name="user"
+            app:argType="com.awesome.mychat.model.User" />
+        <action
+            android:id="@+id/action_previewFragment_to_chatScreenFragment"
+            app:destination="@id/chatScreenFragment"
+            app:popUpTo="@id/chatScreenFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+
+
 
 </navigation>
