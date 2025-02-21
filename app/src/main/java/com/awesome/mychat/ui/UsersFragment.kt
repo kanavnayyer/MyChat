@@ -70,4 +70,31 @@ class UsersFragment : Fragment() {
         val action = UsersFragmentDirections.actionUsersFragmentToChatScreenFragment(user)
         findNavController().navigate(action)
     }
+
+    override fun onResume() {
+        super.onResume()
+
+
+        usersViewModel.fetchUsers()
+
+
+        usersViewModel.users.observe(viewLifecycleOwner) { userList ->
+            allUsers = userList
+
+
+            val query = binding.searchView.text.toString().trim().lowercase()
+            val filteredList = if (query.isNotEmpty()) {
+                allUsers.filter { user -> user.name.lowercase().contains(query) }
+            }
+            else {
+                allUsers
+            }
+
+
+            binding.recyclerViewUsers.adapter = SearchAdapter(filteredList) { user ->
+                openChatScreen(user)
+            }
+        }
+    }
+
 }

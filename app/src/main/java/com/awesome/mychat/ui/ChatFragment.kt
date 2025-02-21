@@ -65,4 +65,6 @@ class ChatFragment : Fragment() {
             adapter = chatAdapter
         }
     }
+
+
 }

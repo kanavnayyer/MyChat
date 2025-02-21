@@ -53,7 +53,10 @@ class ChatScreenFragment : Fragment() {
         userChatViewModel.messages.observe(viewLifecycleOwner) { messages ->
             messageAdapter.submitList(messages) {
                 binding.recyclerViewMessages.post {
-                    binding.recyclerViewMessages.smoothScrollToPosition(messages.size - 1) // 🔥 Smoothly scrolls to last message
+                    val lastIndex = messages.size - 1
+                    if (lastIndex >= 0) {
+                        binding.recyclerViewMessages.smoothScrollToPosition(lastIndex)
+                    }
                 }
             }
         }

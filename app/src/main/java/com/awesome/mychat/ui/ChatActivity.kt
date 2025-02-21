@@ -70,17 +70,20 @@ class ChatActivity : AppCompatActivity() {
     }
 
     fun navigateToEdit(view: View) {
-        chatViewModel.fetchCurrentUser()
-        chatViewModel.userLiveData.observe(this) { user ->
-            user?.let {
-                val intent = Intent(this, EditProfileActivity::class.java)
-                intent.putExtra(getString(R.string.user), it)
-                startActivity(intent)
-            }
 
-
+        chatViewModel.userLiveData.value?.let { user ->
+            val intent = Intent(this, EditProfileActivity::class.java)
+            intent.putExtra(getString(R.string.user), user)
+            startActivity(intent)
         }
     }
+
+
+        fun navigateTo(view: View) {
+            navController.navigate(R.id.action_chatFragment_to_usersFragment)
+        }
+
+
 
 
 }
