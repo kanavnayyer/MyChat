@@ -16,22 +16,22 @@
         android:layout_height="match_parent" />
     <ImageButton
         android:id="@+id/swap_camera_button"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="@dimen/_50dp"
+        android:layout_height="@dimen/_50dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:layout_margin="20dp"
+        android:layout_margin="@dimen/_20dp"
         android:background="@drawable/baseline_flip_camera_android_24"
-        android:contentDescription="Swap Camera" />
+        android:contentDescription="@string/swap_camera" />
     <ImageButton
         android:id="@+id/capture_button"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
+        android:layout_width="@dimen/_70dp"
+        android:layout_height="@dimen/_70dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="30dp"
+        android:layout_marginBottom="@dimen/_30dp"
         android:background="@drawable/baseline_camera_24"
-        android:contentDescription="Take Photo" />
+        android:contentDescription="@string/take_photo" />
 
 </RelativeLayout>
 

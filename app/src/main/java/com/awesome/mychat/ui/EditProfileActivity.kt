@@ -12,6 +12,7 @@ import androidx.databinding.DataBindingUtil
 import com.awesome.mychat.R
 import com.awesome.mychat.databinding.ActivityEditProfileBinding
 import com.awesome.mychat.model.User
+import com.awesome.mychat.util.Constants
 import com.awesome.mychat.viewModel.ChatViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -31,7 +32,8 @@ class EditProfileActivity : AppCompatActivity() {
                     binding.settingProfileImage.setImageURI(uri)
                 }
             } else {
-                Toast.makeText(this, "Image selection canceled", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this,
+                    getString(R.string.image_selection_canceled), Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -40,7 +42,7 @@ class EditProfileActivity : AppCompatActivity() {
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_edit_profile)
 
-        val user = intent.getParcelableExtra<User>("user")
+        val user = intent.getParcelableExtra<User>(Constants.user)
         binding.user = user
 
         binding.buttonSave.setOnClickListener { saveUser() }
@@ -49,17 +51,19 @@ class EditProfileActivity : AppCompatActivity() {
 
         chatViewModel.updateStatus.observe(this) { success ->
             if (success) {
-                Toast.makeText(this, "Profile updated successfully!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this,
+                    getString(R.string.profile_updated_successfully), Toast.LENGTH_SHORT).show()
                 finish()
             } else {
-                Toast.makeText(this, "Failed to update profile.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this,
+                    getString(R.string.failed_to_update_profile), Toast.LENGTH_SHORT).show()
             }
         }
     }
 
     private fun openGallery() {
         val intent = Intent(Intent.ACTION_PICK)
-        intent.type = "image/*"
+        intent.type = getString(R.string.image)
         pickImageLauncher.launch(intent)
     }
 
@@ -67,7 +71,7 @@ class EditProfileActivity : AppCompatActivity() {
         val newName = binding.editname.text.toString().trim()
 
         if (newName.length < 3) {
-            Toast.makeText(this, "Please enter a longer name", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.please_enter_a_longer_name), Toast.LENGTH_SHORT).show()
             return
         }
 

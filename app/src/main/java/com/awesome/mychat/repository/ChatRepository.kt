@@ -4,6 +4,9 @@ package com.awesome.mychat.repository
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.awesome.mychat.model.Message
+import com.awesome.mychat.util.Constants.chats
+import com.awesome.mychat.util.Constants.messages
+import com.awesome.mychat.util.Constants.timestamp
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.SetOptions
@@ -12,8 +15,8 @@ class ChatRepository @Inject constructor(private val firestore: FirebaseFirestor
 
     fun sendMessage(message: Message) {
         val chatId = generateChatId(message.senderId, message.receiverId)
-        val chatRef = firestore.collection("chats").document(chatId)
-        val messagesRef = chatRef.collection("messages")
+        val chatRef = firestore.collection(chats).document(chatId)
+        val messagesRef = chatRef.collection(messages)
 
         messagesRef.add(message)
             .addOnSuccessListener {
@@ -34,10 +37,10 @@ class ChatRepository @Inject constructor(private val firestore: FirebaseFirestor
         val messagesLiveData = MutableLiveData<List<Message>>()
         val chatId = generateChatId(senderId, receiverId)
 
-        firestore.collection("chats")
+        firestore.collection(chats)
             .document(chatId)
-            .collection("messages")
-            .orderBy("timestamp", Query.Direction.ASCENDING)
+            .collection(messages)
+            .orderBy(timestamp, Query.Direction.ASCENDING)
             .addSnapshotListener { snapshot, _ ->
                 if (snapshot != null) {
                     val messages = snapshot.documents.mapNotNull { it.toObject(Message::class.java) }

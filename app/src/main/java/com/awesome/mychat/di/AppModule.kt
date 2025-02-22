@@ -1,5 +1,7 @@
 package com.awesome.mychat.di
 
+import android.app.Application
+import android.content.Context
 import com.awesome.mychat.repository.RecentUsersChatRepository
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -8,6 +10,7 @@ import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
@@ -41,4 +44,6 @@ object AppModule {
     fun provideRecentUsersChatRepository(firestore: FirebaseFirestore): RecentUsersChatRepository {
         return RecentUsersChatRepository(firestore)
     }
+
+
 }

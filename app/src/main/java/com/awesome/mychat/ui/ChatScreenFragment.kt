@@ -49,7 +49,7 @@ class ChatScreenFragment : Fragment() {
         val currentUserId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
 
         userChatViewModel.fetchMessages(currentUserId, user.userId)
-
+        userChatViewModel.updateReceiverLastSeen(user.userId)
         userChatViewModel.messages.observe(viewLifecycleOwner) { messages ->
             messageAdapter.submitList(messages) {
                 binding.recyclerViewMessages.post {
@@ -117,7 +117,8 @@ class ChatScreenFragment : Fragment() {
                
                 findNavController().navigate(R.id.action_chatScreenFragment_to_cameraFragment)
             } else {
-                Toast.makeText(requireContext(), "Camera permission denied", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(),
+                    getString(R.string.camera_permission_denied), Toast.LENGTH_SHORT).show()
             }
         }
     }

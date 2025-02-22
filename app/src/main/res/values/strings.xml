@@ -19,4 +19,25 @@
     <string name="failed_to_update_name">Failed to update name</string>
     <string name="name_updated_successfully">Name updated successfully!</string>
     <string name="user">user</string>
+    <string name="take_photo">Take Photo</string>
+    <string name="swap_camera">Swap Camera</string>
+    <string name="type_a_message">Type a message...</string>
+    <string name="send">Send</string>
+    <string name="firestore_document_exists">" Firestore document exists: %1$s"</string>
+    <string name="user_saved_successfully">" User saved successfully"</string>
+    <string name="error_saving_user">" Error saving user"</string>
+    <string name="user_already_exists_no_need_to_save_again">" User already exists, no need to save again"</string>
+    <string name="error_fetching_document">" Error fetching document"</string>
+    <string name="camerafragment">CameraFragment</string>
+    <string name="image_capture_failed">Image capture failed: %1$s</string>
+    <string name="jpg">.jpg</string>
+    <string name="temp_image">temp_image</string>
+    <string name="camera_binding_failed">Camera binding failed</string>
+    <string name="camera_permission_denied">Camera permission denied</string>
+    <string name="please_enter_a_longer_name">Please enter a longer name</string>
+    <string name="failed_to_update_profile">Failed to update profile.</string>
+    <string name="profile_updated_successfully">Profile updated successfully!</string>
+    <string name="image_selection_canceled">Image selection canceled</string>
+    <string name="image">image/*</string>
+    <string name="chat_images">chat_images</string>
 </resources>

@@ -54,6 +54,7 @@ dependencies {
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.firebase.messaging.ktx)
     implementation(libs.firebase.storage.ktx)
+    implementation(libs.volley)
     kapt("com.google.dagger:hilt-android-compiler:2.51.1")
     implementation(platform("com.google.firebase:firebase-bom:33.9.0"))
     implementation("com.google.android.gms:play-services-basement:18.2.0")

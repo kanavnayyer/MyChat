@@ -18,7 +18,7 @@
         android:layout_height="wrap_content"
         android:padding="@dimen/_8dp">
 
-        <!-- Text Message -->
+
         <TextView
             android:id="@+id/txtMessage"
             android:layout_width="wrap_content"
@@ -26,7 +26,7 @@
             android:padding="@dimen/_12dp"
             android:textSize="@dimen/_14sp"
             android:textColor="@android:color/black"
-            android:background="@drawable/bg_message"
+            app:messageBackground="@{isSent}"
             android:text="@{message.type.equals(`text`) ? message.message : ``}"
             android:visibility="@{message.type.equals(`text`) ? View.VISIBLE : View.GONE}"
             app:messageAlignment="@{isSent}"

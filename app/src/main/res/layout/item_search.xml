@@ -39,7 +39,7 @@
             android:layout_height="wrap_content"
             android:paddingStart="@dimen/_5dp"
             android:text="@{user.name}"
-            android:textColor="@android:color/black"
+            android:textColor="@color/black"
             android:textSize="@dimen/_16sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"

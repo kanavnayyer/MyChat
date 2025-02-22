@@ -1,6 +1,6 @@
 package com.awesome.mychat.model
 
-
+import com.awesome.mychat.util.Constants.Text
 
 
 data class Message(
@@ -8,5 +8,5 @@ data class Message(
     val receiverId: String = "",
     val message: String = "",
     val timestamp: Long = 0L,
-    val type: String = "text"
+    val type: String = Text
 )

@@ -13,6 +13,7 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.awesome.mychat.R
 import com.awesome.mychat.databinding.FragmentCameraBinding
 
 import kotlinx.coroutines.launch
@@ -64,7 +65,7 @@ class CameraFragment : Fragment() {
                 cameraProvider?.unbindAll()
                 cameraProvider?.bindToLifecycle(viewLifecycleOwner, cameraSelector, preview, imageCapture)
             } catch (e: Exception) {
-                Log.e("CameraFragment", "Camera binding failed", e)
+                Log.e(getString(R.string.camerafragment), getString(R.string.camera_binding_failed), e)
             }
         }, ContextCompat.getMainExecutor(requireContext()))
     }
@@ -79,7 +80,9 @@ class CameraFragment : Fragment() {
     }
 
     private fun captureImage() {
-        val photoFile = File.createTempFile("temp_image", ".jpg", requireContext().cacheDir)
+        val photoFile = File.createTempFile(
+            getString(R.string.temp_image),
+            getString(R.string.jpg), requireContext().cacheDir)
         val outputOptions = ImageCapture.OutputFileOptions.Builder(photoFile).build()
 
         imageCapture?.takePicture(outputOptions, ContextCompat.getMainExecutor(requireContext()),
@@ -90,7 +93,8 @@ class CameraFragment : Fragment() {
                 }
 
                 override fun onError(exception: ImageCaptureException) {
-                    Log.e("CameraFragment", "Image capture failed: ${exception.message}", exception)
+                    Log.e(getString(R.string.camerafragment),
+                        getString(R.string.image_capture_failed, exception.message), exception)
                 }
             })
     }

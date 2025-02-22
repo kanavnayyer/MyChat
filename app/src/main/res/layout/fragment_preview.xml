@@ -16,8 +16,9 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:text="Send"
-            android:padding="16dp"
+            android:text="@string/send"
+            android:padding="@dimen/_16dp"
+            android:layout_marginBottom="@dimen/_15dp"
             android:backgroundTint="@android:color/holo_green_dark"/>
     </RelativeLayout>
 </layout>

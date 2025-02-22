@@ -13,6 +13,9 @@ import com.awesome.mychat.R
 import com.awesome.mychat.databinding.FragmentPreviewBinding
 import com.awesome.mychat.model.Message
 import com.awesome.mychat.model.User
+import com.awesome.mychat.util.Constants.chats
+import com.awesome.mychat.util.Constants.image
+import com.awesome.mychat.util.Constants.messages
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import java.io.File
@@ -38,57 +41,50 @@ class PreviewFragment : Fragment() {
         val imageUri = Uri.parse(args.imageUri)
         val user: User = args.user
 
-        Log.d("PreviewFragment", "Received Image URI: $imageUri")
-        Log.d("PreviewFragment", "Received User: ${user.userId}")
 
         binding.imagePreview.setImageURI(imageUri)
 
         binding.sendButton.setOnClickListener {
-            Log.d("PreviewFragment", "Send button clicked")
+
             sendMessage(user, imageUri)
         }
     }
 
     private fun sendMessage(user: User, imageUri: Uri) {
         val currentUserId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
-        Log.d("PreviewFragment", "Current User ID: $currentUserId")
 
         if (currentUserId.isEmpty()) {
-            Log.e("PreviewFragment", "User not logged in, cannot send message")
             return
         }
 
         val imagePath = saveImageLocally(imageUri)
         if (imagePath.isEmpty()) {
-            Log.e("PreviewFragment", "Failed to save image locally")
             return
         }
 
         val chatId = generateChatId(currentUserId, user.userId)
-        val chatRef = firestore.collection("chats").document(chatId)
-        val messagesRef = chatRef.collection("messages")
+        val chatRef = firestore.collection(chats).document(chatId)
+        val messagesRef = chatRef.collection(messages)
 
         val chatMessage = Message(
             senderId = currentUserId,
             receiverId = user.userId,
             message = imagePath.toString(),
             timestamp = System.currentTimeMillis(),
-            type = "image"
+            type = image
         )
 
         messagesRef.add(chatMessage)
             .addOnSuccessListener {
-                Log.d("PreviewFragment", "Message sent successfully, navigating back")
                 findNavController().popBackStack(R.id.chatScreenFragment, false)
             }
             .addOnFailureListener { e ->
-                Log.e("PreviewFragment", "Error sending message: ${e.message}", e)
             }
     }
 
     private fun saveImageLocally(imageUri: Uri): String {
         val context = requireContext()
-        val imagesDir = File(context.filesDir, "chat_images")
+        val imagesDir = File(context.filesDir, getString(R.string.chat_images))
         if (!imagesDir.exists()) imagesDir.mkdirs()
 
         val imageFile = File(imagesDir, "IMG_${System.currentTimeMillis()}.jpg")
@@ -99,10 +95,9 @@ class PreviewFragment : Fragment() {
                     input.copyTo(output)
                 }
             }
-            Log.d("PreviewFragment", "Image saved locally: ${imageFile.absolutePath}")
+
             imageFile.absolutePath
         } catch (e: Exception) {
-            Log.e("PreviewFragment", "Error saving image locally: ${e.message}", e)
             ""
         }
     }

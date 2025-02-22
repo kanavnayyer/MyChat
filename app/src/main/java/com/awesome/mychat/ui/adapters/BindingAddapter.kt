@@ -13,6 +13,7 @@ import com.awesome.mychat.util.Constants.FormattedLastSeen
 import com.awesome.mychat.util.Constants.ImageUrlchat
 import com.awesome.mychat.util.Constants.MessageAlignment
 import com.awesome.mychat.util.Constants.imageUrl
+import com.awesome.mychat.util.Constants.messageBackground
 import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
 import java.text.SimpleDateFormat
@@ -105,4 +106,11 @@ object BindingAddapter {
         } else {
             view.setImageResource(R.drawable.ic_profile)
         }
-    }}
+    }
+      @JvmStatic
+    @BindingAdapter(messageBackground)
+    fun setMessageBackground(view: TextView, isSent: Boolean) {
+        val backgroundRes = if (isSent) R.drawable.bg_message else R.drawable.bg_message_received
+        view.setBackgroundResource(backgroundRes)
+    }
+}

@@ -1,7 +1,12 @@
 package com.awesome.mychat.repository
 
+import android.content.Context
 import android.util.Log
+import com.awesome.mychat.R
 import com.awesome.mychat.model.User
+import com.awesome.mychat.util.Constants.AuthRepository
+import com.awesome.mychat.util.Constants.Unknown
+import com.awesome.mychat.util.Constants.users
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.firestore.FirebaseFirestore
@@ -31,7 +36,7 @@ class AuthRepository @Inject constructor(
                         FirebaseMessaging.getInstance().token.addOnSuccessListener { fcmToken ->
                             val userData = User(
                                 userId = user.uid,
-                                name = user.displayName ?: "Unknown",
+                                name = user.displayName ?: Unknown,
                                 profileImage = user.photoUrl?.toString() ?: "",
                                 fcmToken = fcmToken,
                                 lastSeen = System.currentTimeMillis()
@@ -48,26 +53,13 @@ class AuthRepository @Inject constructor(
     }
 
     fun saveUserToFirestore(user: User) {
-        Log.d("AuthRepository", " saveUserToFirestore called for user: ${user.userId}")
+        
 
-        firestore.collection("users").document(user.userId).get()
+        firestore.collection(users).document(user.userId).get()
             .addOnSuccessListener { document ->
-                Log.d("AuthRepository", " Firestore document exists: ${document.exists()}")
-
                 if (!document.exists()) {
-                    firestore.collection("users").document(user.userId).set(user)
-                        .addOnSuccessListener {
-                            Log.d("AuthRepository", " User saved successfully")
-                        }
-                        .addOnFailureListener { e ->
-                            Log.e("AuthRepository", " Error saving user", e)
-                        }
-                } else {
-                    Log.d("AuthRepository", " User already exists, no need to save again")
+                    firestore.collection(users).document(user.userId).set(user)
                 }
-            }
-            .addOnFailureListener { e ->
-                Log.e("AuthRepository", " Error fetching document", e)
             }
     }
 

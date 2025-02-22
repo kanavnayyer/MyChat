@@ -6,6 +6,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.awesome.mychat.model.Message
+import com.awesome.mychat.util.Constants
+import com.awesome.mychat.util.Constants.chats
+import com.awesome.mychat.util.Constants.lastMessage
+import com.awesome.mychat.util.Constants.lastMessageTimestamp
+import com.awesome.mychat.util.Constants.lastSeen
+import com.awesome.mychat.util.Constants.participants
+import com.awesome.mychat.util.Constants.timestamp
+import com.awesome.mychat.util.Constants.users
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.*
 import com.google.firebase.storage.FirebaseStorage
@@ -22,25 +30,25 @@ class UserChatViewModel @Inject constructor() : ViewModel() {
     private val _messages = MutableLiveData<List<Message>>()
     val messages: LiveData<List<Message>> get() = _messages
 
-    // ✅ Modified to support both text & image messages
     fun sendMessage(message: Message) {
         val chatId = generateChatId(message.senderId, message.receiverId)
-        val chatRef = firestore.collection("chats").document(chatId)
-        val messagesRef = chatRef.collection("messages")
+        val chatRef = firestore.collection(chats).document(chatId)
+        val messagesRef = chatRef.collection(Constants.messages)
 
         chatRef.get().addOnSuccessListener { document ->
             if (!document.exists()) {
                 val chatData = hashMapOf(
-                    "chatId" to chatId,
-                    "lastMessage" to message.message,
-                    "lastMessageTimestamp" to message.timestamp,
-                    "participants" to listOf(message.senderId, message.receiverId)
+                    chatId to chatId,
+                    lastMessage to message.message,
+                    lastMessageTimestamp to message.timestamp,
+                    participants to listOf(message.senderId, message.receiverId)
                 )
                 chatRef.set(chatData, SetOptions.merge())
             }
             sendMessageToSubcollection(messagesRef, message, chatRef)
         }
     }
+
 
     private fun sendMessageToSubcollection(
         messagesRef: CollectionReference,
@@ -50,31 +58,42 @@ class UserChatViewModel @Inject constructor() : ViewModel() {
         messagesRef.add(message)
             .addOnSuccessListener {
                 val chatUpdates = mapOf(
-                    "lastMessage" to message.message,
-                    "lastMessageTimestamp" to message.timestamp
+                    lastMessage to message.message,
+                    lastMessageTimestamp to message.timestamp
                 )
                 chatRef.update(chatUpdates)
+
+
+                firestore.collection(users).document(message.senderId)
+                    .update(lastSeen, message.timestamp)
             }
-            .addOnFailureListener { e ->
-                Log.e("UserChatViewModel", "Failed to send message", e)
-            }
+
     }
+
 
 
 
     fun fetchMessages(senderId: String, receiverId: String) {
         val chatId = generateChatId(senderId, receiverId)
 
-        firestore.collection("chats")
+        firestore.collection(chats)
             .document(chatId)
-            .collection("messages")
-            .orderBy("timestamp", Query.Direction.ASCENDING)
+            .collection(Constants.messages)
+            .orderBy(timestamp, Query.Direction.ASCENDING)
             .addSnapshotListener { snapshot, error ->
                 if (error != null) return@addSnapshotListener
 
-                val messageList = snapshot?.documents?.mapNotNull { doc -> doc.toObject(Message::class.java) } ?: emptyList()
+                val messageList = snapshot?.documents?.mapNotNull { doc ->
+                    doc.toObject(Message::class.java)
+                } ?: emptyList()
+
                 _messages.value = messageList
             }
+    }
+
+    fun updateReceiverLastSeen(receiverId: String) {
+        firestore.collection(users).document(receiverId)
+            .update(lastSeen, System.currentTimeMillis())
     }
 
     private fun generateChatId(user1: String, user2: String): String {
